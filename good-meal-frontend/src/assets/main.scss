@@ -1,0 +1,63 @@
+@import 'variables';
+@import 'mixins';
+@import 'base';
+
+#app {
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  
+  
+  font-weight: normal;
+}
+
+
+
+a {
+  color: $pink;
+}
+
+
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+   
+  }
+
+  #app {
+    display: flex;
+    
+    padding: 0;
+
+    & > nav {
+      @include shadow;
+      max-width: 100px;
+      display: grid;
+      grid-template-columns: 1fr;
+
+      a {
+        padding: 2rem;
+        height: 7rem;
+        font-size: 2.5rem;
+      }
+    }
+
+
+    main {
+      width: 100%;
+      display: block;
+    }
+  }
+}
