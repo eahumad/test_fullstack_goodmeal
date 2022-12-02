@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-						$table->integer('number')->unique();
+						$table->integer('number')->unique()->nullable();
             $table->integer('market_id')->references('id')->on('markets');
 						$table->date('ordered_at');
 						$table->date('pick_up_date');
