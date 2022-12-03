@@ -15,7 +15,7 @@ class MarketController extends Controller {
    *
    */
   public function save(Request $request) : Market {
-    //TODO: Validar
+
     $request->validate([
       'name' => 'required|unique:markets|max:255',
       'address' => 'required|max:255',
@@ -23,11 +23,17 @@ class MarketController extends Controller {
       'longitude' => ['required','regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/']
     ]);
 
+    //TODO: cargar fotos
 
     $market = new Market($request->all());
 
     $market->save();
 
     return $market;
+  }
+
+
+  public function list() {
+    return Market::get();
   }
 }
