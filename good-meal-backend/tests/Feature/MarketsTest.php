@@ -5,6 +5,9 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Testing\Fluent\AssertableJson;
+use Illuminate\Support\Facades\Log;
+
 
 class MarketsTest extends TestCase {
   use WithFaker;
@@ -23,7 +26,7 @@ class MarketsTest extends TestCase {
 
   public function test_saveIncorrectLatitudeLongitude() {
     $payload = [
-      'name'      => $this->faker->unique()->company ,
+      'name'      => $this->faker->unique()->company,
       'address'   => $this->faker->address,
       'latitude'  => 123,
       'longitude'  => 123,
@@ -37,14 +40,29 @@ class MarketsTest extends TestCase {
 
   public function test_saveCorrect() {
     $payload = [
-      'name'      => $this->faker->unique()->company ,
+      'name'      => $this->faker->unique()->company,
       'address'   => $this->faker->address,
-      'latitude'  => $this->faker->latitude(-35.79,-35.71),
+      'latitude'  => $this->faker->latitude(-35.79, -35.71),
       'longitude'  => $this->faker->longitude(-71.67, -71.47),
     ];
 
     $response = $this->postJson('/api/markets', $payload);
 
     $response->assertStatus(201);
+  }
+
+
+  public function test_list() {
+    $response = $this->getJson('/api/markets');
+
+    $response->assertStatus(200);
+
+    $response->assertJson(
+      fn (AssertableJson $json) =>
+      $json->first(
+        fn (AssertableJson $json) =>
+        $json->hasAll(['name', 'id', 'address', 'latitude', 'longitude', 'created_at', 'updated_at', 'deleted_at'])
+      )
+    );
   }
 }
