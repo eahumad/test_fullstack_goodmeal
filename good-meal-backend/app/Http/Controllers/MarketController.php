@@ -36,4 +36,8 @@ class MarketController extends Controller {
   public function list() {
     return Market::get();
   }
+
+  public function get(Request $request) {
+    return Market::findOrFail($request->id);
+  }
 }

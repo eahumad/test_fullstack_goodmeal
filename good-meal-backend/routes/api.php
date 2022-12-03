@@ -23,4 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::controller(MarketController::class)->group( function() {
   Route::post('/markets','save');
   Route::get('/markets','list');
+  Route::get('/markets/{id}','get');
 });
