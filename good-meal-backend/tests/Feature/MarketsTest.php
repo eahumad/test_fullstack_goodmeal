@@ -39,12 +39,7 @@ class MarketsTest extends TestCase {
   }
 
   public function test_saveCorrect() {
-    $payload = [
-      'name'      => $this->faker->unique()->company,
-      'address'   => $this->faker->address,
-      'latitude'  => $this->faker->latitude(-35.79, -35.71),
-      'longitude'  => $this->faker->longitude(-71.67, -71.47),
-    ];
+    $payload = $this->createCorrectPayload();
 
     $response = $this->postJson('/api/markets', $payload);
 
@@ -64,5 +59,42 @@ class MarketsTest extends TestCase {
         $json->hasAll(['name', 'id', 'address', 'latitude', 'longitude', 'created_at', 'updated_at', 'deleted_at'])
       )
     );
+  }
+
+
+  public function test_getExisting() {
+    $payload = $this->createCorrectPayload();
+    $responsePost = $this->postJson('/api/markets', $payload);
+
+    $response = $this->getJson('/api/markets/'. $responsePost->original->id);
+
+    $response->assertStatus(200);
+    $response->assertJson(
+      fn (AssertableJson $json) =>
+      $json->hasAll(['name', 'id', 'address', 'latitude', 'longitude', 'created_at', 'updated_at', 'deleted_at'])
+        ->where('name', $payload['name'])
+        ->etc()
+    );
+  }
+
+  public function test_getNotExisting() {
+    $payload = $this->createCorrectPayload();
+    $responsePost = $this->postJson('/api/markets', $payload);
+
+    $response = $this->getJson('/api/markets/'. $responsePost->original->id+1);
+
+    $response->assertStatus(404);
+  }
+
+
+  private function createCorrectPayload() : Array {
+    $payload = [
+      'name'      => $this->faker->unique()->company,
+      'address'   => $this->faker->address,
+      'latitude'  => $this->faker->latitude(-35.79, -35.71),
+      'longitude'  => $this->faker->longitude(-71.67, -71.47),
+    ];
+
+    return $payload;
   }
 }
