@@ -32,12 +32,22 @@ class MarketController extends Controller {
     return $market;
   }
 
-
-  public function list() {
+  /**
+   * List all markets
+   *
+   * @return Array
+   */
+  public function list() : array {
     return Market::get();
   }
 
-  public function get(Request $request) {
+  /**
+   * Get market by id on request
+   *
+   * @param Illuminate\Http\Request $request
+   * @return  App\Models\Market
+   */
+  public function get(Request $request) : Market {
     return Market::findOrFail($request->id);
   }
 }
