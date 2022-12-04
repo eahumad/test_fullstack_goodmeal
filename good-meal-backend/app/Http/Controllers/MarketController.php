@@ -50,4 +50,23 @@ class MarketController extends Controller {
   public function get(Request $request) : Market {
     return Market::findOrFail($request->id);
   }
+
+  public function update(Request $request,int $id) : void {
+
+    $request->validate([
+      'name' => 'required|max:255|unique:markets,name,'.$id,
+      'address' => 'required|max:255',
+      'latitude' => ['required','regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+      'longitude' => ['required','regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/']
+    ]);
+
+    $market = Market::findOrFail($id);
+
+    $market->name = $request->name;
+    $market->address = $request->address;
+    $market->latitude = $request->latitude;
+    $market->longitude = $request->longitude;
+
+    $market->save();
+  }
 }

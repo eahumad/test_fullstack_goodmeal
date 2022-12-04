@@ -24,4 +24,5 @@ Route::controller(MarketController::class)->group( function() {
   Route::post('/markets','save');
   Route::get('/markets','list');
   Route::get('/markets/{id}','get');
+  Route::put('/markets/{id}','update');
 });
