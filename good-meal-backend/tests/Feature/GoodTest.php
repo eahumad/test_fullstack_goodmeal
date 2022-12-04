@@ -57,7 +57,7 @@ class GoodTest extends TestCase {
     $payload = $this->createCorrectPayload();
     $responsePost = $this->postJson('/api/goods', $payload);
 
-    $response = $this->getJson('/api/goods/'. $responsePost->original->id);
+    $response = $this->getJson('/api/goods/'. $responsePost->original['id']);
 
     $response->assertStatus(200);
     $response->assertJson(
@@ -72,7 +72,7 @@ class GoodTest extends TestCase {
     $payload = $this->createCorrectPayload();
     $responsePost = $this->postJson('/api/goods', $payload);
 
-    $response = $this->getJson('/api/goods/'. $responsePost->original->id+1);
+    $response = $this->getJson('/api/goods/'. $responsePost->original['id']+1);
 
     $response->assertStatus(404);
   }
@@ -82,7 +82,7 @@ class GoodTest extends TestCase {
     $responsePost = $this->postJson('/api/goods', $payload);
     $payload = $this->createCorrectPayload();
 
-    $response = $this->putJson('/api/goods/'.$responsePost->original->id, $payload);
+    $response = $this->putJson('/api/goods/'.$responsePost->original['id'], $payload);
 
     $response->assertStatus(200);
   }
@@ -91,7 +91,7 @@ class GoodTest extends TestCase {
     $payload = $this->createCorrectPayload();
     $responsePost = $this->postJson('/api/goods', $payload);
 
-    $response = $this->putJson('/api/goods/'.$responsePost->original->id);
+    $response = $this->putJson('/api/goods/'.$responsePost->original['id']);
 
     $response->assertStatus(422);
     $response->assertSee('The name field is required');
@@ -102,7 +102,7 @@ class GoodTest extends TestCase {
     $responsePost = $this->postJson('/api/goods', $payload);
     $payload['name'].= 'a';
 
-    $response = $this->putJson('/api/goods/'.$responsePost->original->id+1, $payload);
+    $response = $this->putJson('/api/goods/'.$responsePost->original['id']+1, $payload);
 
     $response->assertStatus(404);
   }
