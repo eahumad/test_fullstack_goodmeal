@@ -86,6 +86,36 @@ class MarketsTest extends TestCase {
     $response->assertStatus(404);
   }
 
+  public function test_updateExisting() {
+    $payload = $this->createCorrectPayload();
+    $responsePost = $this->postJson('/api/markets', $payload);
+    $payload = $this->createCorrectPayload();
+
+    $response = $this->putJson('/api/markets/'.$responsePost->original->id, $payload);
+
+    $response->assertStatus(200);
+  }
+
+  public function test_updateNotPayload() {
+    $payload = $this->createCorrectPayload();
+    $responsePost = $this->postJson('/api/markets', $payload);
+
+    $response = $this->putJson('/api/markets/'.$responsePost->original->id);
+
+    $response->assertStatus(422);
+    $response->assertSee('The name field is required');
+  }
+
+  public function test_updateNotExisting() {
+    $payload = $this->createCorrectPayload();
+    $responsePost = $this->postJson('/api/markets', $payload);
+    $payload['name'].= 'a';
+
+    $response = $this->putJson('/api/markets/'.$responsePost->original->id+1, $payload);
+
+    $response->assertStatus(404);
+  }
+
 
   private function createCorrectPayload() : Array {
     $payload = [
