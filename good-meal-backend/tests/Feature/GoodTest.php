@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Support\Facades\Log;
 
 class GoodTest extends TestCase {
@@ -33,6 +34,23 @@ class GoodTest extends TestCase {
     $response = $this->postJson('/api/goods',$payload);
 
     $response->assertStatus(201);
+  }
+
+  public function test_list() {
+    $payload = $this->createCorrectPayload();
+    $response = $this->postJson('/api/goods',$payload);
+
+    $response = $this->getJson('/api/goods');
+
+    $response->assertStatus(200);
+
+    $response->assertJson(
+      fn (AssertableJson $json) =>
+      $json->first(
+        fn (AssertableJson $json) =>
+        $json->hasAll(['id', 'name', 'brand', 'category','created_at','updated_at','deleted_at'])
+      )
+    );
   }
 
   private function createCorrectPayload() : Array {
