@@ -25,4 +25,13 @@ class GoodController extends Controller {
 
     return $good;
   }
+
+  /**
+   * List all goods
+   *
+   * @return Illuminate\Database\Eloquent\Collection
+   */
+  public function list() : \Illuminate\Database\Eloquent\Collection {
+    return Good::get();
+  }
 }

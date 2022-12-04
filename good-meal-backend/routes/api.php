@@ -30,4 +30,5 @@ Route::controller(MarketController::class)->group( function() {
 
 Route::controller(GoodController::class)->group( function() {
   Route::post('/goods','save');
+  Route::get('/goods','list');
 });
