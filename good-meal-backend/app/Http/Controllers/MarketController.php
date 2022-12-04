@@ -42,7 +42,7 @@ class MarketController extends Controller {
   }
 
   /**
-   * Get market by id on request
+   * Get market by id on route
    *
    * @param Illuminate\Http\Request $request
    * @return  App\Models\Market
@@ -51,6 +51,14 @@ class MarketController extends Controller {
     return Market::findOrFail($request->id);
   }
 
+  /**
+   * Update market by id on route
+   *
+   * @param Illuminate\Http\Request $request
+   * @param int $id
+   * @return void
+   *
+   */
   public function update(Request $request,int $id) : void {
 
     $request->validate([
