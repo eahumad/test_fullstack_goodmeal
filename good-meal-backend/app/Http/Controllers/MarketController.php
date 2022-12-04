@@ -35,9 +35,9 @@ class MarketController extends Controller {
   /**
    * List all markets
    *
-   * @return Array
+   * @return \Illuminate\Database\Eloquent\Collection
    */
-  public function list() : array {
+  public function list() : \Illuminate\Database\Eloquent\Collection {
     return Market::get();
   }
 
