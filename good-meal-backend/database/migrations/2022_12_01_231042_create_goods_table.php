@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('goods', function (Blueprint $table) {
             $table->id();
-						$table->string('good_category_code')->references('code')->on('good_category_code');
+						$table->string('category');
 						$table->string('name');
 						$table->string('brand');
             $table->timestamps();
