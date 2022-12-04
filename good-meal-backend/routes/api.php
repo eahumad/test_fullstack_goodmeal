@@ -31,4 +31,6 @@ Route::controller(MarketController::class)->group( function() {
 Route::controller(GoodController::class)->group( function() {
   Route::post('/goods','save');
   Route::get('/goods','list');
+  Route::get('/goods/{id}','get');
+  Route::put('/goods/{id}','update');
 });
