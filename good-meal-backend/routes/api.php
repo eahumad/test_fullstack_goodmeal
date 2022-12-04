@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MarketController;
+use App\Http\Controllers\GoodController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,8 @@ Route::controller(MarketController::class)->group( function() {
   Route::get('/markets','list');
   Route::get('/markets/{id}','get');
   Route::put('/markets/{id}','update');
+});
+
+Route::controller(GoodController::class)->group( function() {
+  Route::post('/goods','save');
 });
