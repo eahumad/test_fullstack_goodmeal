@@ -7,10 +7,15 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 
 class MarketsTest extends TestCase {
   use WithFaker;
+
+  private $responseMustHaveArray = ['name', 'id', 'address', 'latitude', 'longitude', 'created_at', 'updated_at', 'deleted_at','logo','cover'];
+
   /**
    * A basic feature test example.
    *
@@ -56,7 +61,7 @@ class MarketsTest extends TestCase {
       fn (AssertableJson $json) =>
       $json->first(
         fn (AssertableJson $json) =>
-        $json->hasAll(['name', 'id', 'address', 'latitude', 'longitude', 'created_at', 'updated_at', 'deleted_at'])
+        $json->hasAll( $this->responseMustHaveArray )
       )
     );
   }
@@ -66,12 +71,12 @@ class MarketsTest extends TestCase {
     $payload = $this->createCorrectPayload();
     $responsePost = $this->postJson('/api/markets', $payload);
 
-    $response = $this->getJson('/api/markets/'. $responsePost->original->id);
+    $response = $this->getJson('/api/markets/'. $responsePost->original['id']);
 
     $response->assertStatus(200);
     $response->assertJson(
       fn (AssertableJson $json) =>
-      $json->hasAll(['name', 'id', 'address', 'latitude', 'longitude', 'created_at', 'updated_at', 'deleted_at'])
+      $json->hasAll( $this->responseMustHaveArray )
         ->where('name', $payload['name'])
         ->etc()
     );
@@ -81,7 +86,7 @@ class MarketsTest extends TestCase {
     $payload = $this->createCorrectPayload();
     $responsePost = $this->postJson('/api/markets', $payload);
 
-    $response = $this->getJson('/api/markets/'. $responsePost->original->id+1);
+    $response = $this->getJson('/api/markets/'. $responsePost->original['id']+1);
 
     $response->assertStatus(404);
   }
@@ -91,7 +96,7 @@ class MarketsTest extends TestCase {
     $responsePost = $this->postJson('/api/markets', $payload);
     $payload = $this->createCorrectPayload();
 
-    $response = $this->putJson('/api/markets/'.$responsePost->original->id, $payload);
+    $response = $this->putJson('/api/markets/'.$responsePost->original['id'], $payload);
 
     $response->assertStatus(200);
   }
@@ -99,8 +104,7 @@ class MarketsTest extends TestCase {
   public function test_updateNotPayload() {
     $payload = $this->createCorrectPayload();
     $responsePost = $this->postJson('/api/markets', $payload);
-
-    $response = $this->putJson('/api/markets/'.$responsePost->original->id);
+    $response = $this->putJson('/api/markets/'.$responsePost->original['id']);
 
     $response->assertStatus(422);
     $response->assertSee('The name field is required');
@@ -111,19 +115,35 @@ class MarketsTest extends TestCase {
     $responsePost = $this->postJson('/api/markets', $payload);
     $payload['name'].= 'a';
 
-    $response = $this->putJson('/api/markets/'.$responsePost->original->id+1, $payload);
+
+
+    $response = $this->putJson('/api/markets/'.$responsePost->original['id']+1, $payload);
 
     $response->assertStatus(404);
   }
 
 
   private function createCorrectPayload() : Array {
+
+
+    $logoName = 'logo_'.rand(1,3).'.png';
+    $coverName = 'logo_'.rand(1,3).'.jpeg';
+    $path = dirname(__FILE__).'/../files/';
+
+    Storage::fake('local');
+
     $payload = [
       'name'      => $this->faker->unique()->company,
       'address'   => $this->faker->address,
       'latitude'  => $this->faker->latitude(-35.79, -35.71),
       'longitude'  => $this->faker->longitude(-71.67, -71.47),
+      'logo' => UploadedFile::fake()->create('file.png'),
+      'cover' => UploadedFile::fake()->create('file.jpeg'),
+      /*'logo' => new \Illuminate\Http\UploadedFile(resource_path($logoName), $logoName, null, null, true),
+      'cover' => new \Illuminate\Http\UploadedFile(resource_path($coverName), $coverName, null, null, true),*/
     ];
+
+
 
     return $payload;
   }
