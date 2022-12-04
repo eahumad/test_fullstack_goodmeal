@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('goods', function (Blueprint $table) {
             $table->id();
-						$table->string('category');
-						$table->string('name');
+						$table->string('name')->unique();
 						$table->string('brand');
+						$table->string('category');
             $table->timestamps();
 						$table->softDeletes();
         });
