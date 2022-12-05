@@ -7,8 +7,13 @@ module.exports = {
     "plugin:vue/vue3-essential",
     "eslint:recommended",
     "@vue/eslint-config-prettier",
+    "plugin:vue/base",
   ],
   parserOptions: {
     ecmaVersion: "latest",
+  },
+  rules: {
+    "vue/multi-word-component-names": "off",
+    "vue/script-setup-uses-vars": "error",
   },
 };

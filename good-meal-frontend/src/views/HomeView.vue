@@ -1,9 +1,8 @@
 <script setup>
 import TheWelcome from "../components/TheWelcome.vue";
+import Markets from "../components/Markets.vue";
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <Markets />
 </template>
