@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Market;
+use App\Models\Good;
 
 class MarketController extends Controller {
 
@@ -67,7 +68,10 @@ class MarketController extends Controller {
    * @return \Illuminate\Database\Eloquent\Collection
    */
   public function list() : \Illuminate\Database\Eloquent\Collection {
-    return Market::get();
+    return Market::get()->map( function($market) {
+      $market->categories = $this->listMarketCategories($market->id);
+      return $market;
+    });
   }
 
   /**
@@ -77,7 +81,9 @@ class MarketController extends Controller {
    * @return  App\Models\Market
    */
   public function get(Request $request) : Market {
-    return Market::findOrFail($request->id);
+    $market = Market::findOrFail($request->id);
+    $market->categories = $this->listMarketCategories($market->id);
+    return $market;
   }
 
   /**
@@ -105,5 +111,20 @@ class MarketController extends Controller {
     $market->longitude = $request->longitude;
 
     $market->save();
+  }
+
+  /**
+   * list market categories
+   * @param int $id
+   * @return Array
+   */
+  private function listMarketCategories(int $market_id) : \Illuminate\Database\Eloquent\Collection {
+    $categories = Good::select('category')
+      ->join('good_market', 'good_market.good_id','goods.id')
+      ->where('good_market.market_id',$market_id)
+      ->groupBy('goods.category')
+      ->get();
+
+    return $categories;
   }
 }

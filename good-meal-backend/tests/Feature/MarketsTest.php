@@ -14,7 +14,7 @@ use Illuminate\Http\UploadedFile;
 class MarketsTest extends TestCase {
   use WithFaker;
 
-  private $responseMustHaveArray = ['name', 'id', 'address', 'latitude', 'longitude', 'created_at', 'updated_at', 'deleted_at','logo','cover','logo_url','cover_url'];
+  private $responseMustHaveArray = ['name', 'id', 'address', 'latitude', 'longitude', 'created_at', 'updated_at', 'deleted_at','logo','cover','logo_url','cover_url', 'categories'];
 
   /**
    * A basic feature test example.
