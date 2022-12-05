@@ -6,9 +6,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Testing\Fluent\AssertableJson;
-use Illuminate\Support\Facades\Log;
+
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
+
 
 
 class MarketsTest extends TestCase {
@@ -130,7 +130,7 @@ class MarketsTest extends TestCase {
     $coverName = 'logo_'.rand(1,3).'.jpeg';
     $path = dirname(__FILE__).'/../files/';
 
-    Storage::fake('local');
+
 
     $payload = [
       'name'      => $this->faker->unique()->company,
