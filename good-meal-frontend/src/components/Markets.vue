@@ -1,20 +1,25 @@
 <script setup>
+import {  onMounted } from "vue";
 import { Tabs, Tab } from "vue3-tabs-component";
 import MarketsList from "./MarketsList.vue";
-import MarketFilters from "../enums/MarketFilters";
+
+import { useMarketStore } from '../stores/market'
+
+const marketStore = useMarketStore()
+
 </script>
 
 <template>
   <div class="markets">
     <tabs class="tabs">
       <tab name="Con Stock">
-        <MarketsList :filter="MarketFilters.withStock"></MarketsList>
+        <MarketsList :markets="marketStore.getMarketsWithStock" ></MarketsList>
       </tab>
       <tab name="Sin Stock">
-        <MarketsList :filter="MarketFilters.noStock"></MarketsList>
+        <MarketsList :markets="marketStore.getMarketsNoStock"></MarketsList>
       </tab>
       <tab name="Favoritos">
-        <MarketsList :filter="MarketFilters.favs"></MarketsList>
+        <MarketsList :markets="marketStore.getMarketsFavs"></MarketsList>
       </tab>
     </tabs>
   </div>

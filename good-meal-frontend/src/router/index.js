@@ -26,7 +26,8 @@ const router = createRouter({
     {
       path: "/:id/:name",
       name: "Tienda",
-      component: () => import('../views/MarketView.vue')
+      component: () => import('../views/MarketView.vue'),
+      props: true
     }
   ],
 });
