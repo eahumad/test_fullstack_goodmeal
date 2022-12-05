@@ -13,7 +13,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <RouterLink to="/">
+  <RouterLink :to="`/${market.id}/${market.name.replaceAll(' ', '-')}`">
     <card class="market-card">
       <div class="header">
         <img
