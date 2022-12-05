@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class MarketsTest extends TestCase {
   use WithFaker;
 
-  private $responseMustHaveArray = ['name', 'id', 'address', 'latitude', 'longitude', 'created_at', 'updated_at', 'deleted_at','logo','cover'];
+  private $responseMustHaveArray = ['name', 'id', 'address', 'latitude', 'longitude', 'created_at', 'updated_at', 'deleted_at','logo','cover','logo_url','cover_url'];
 
   /**
    * A basic feature test example.
@@ -139,8 +139,6 @@ class MarketsTest extends TestCase {
       'longitude'  => $this->faker->longitude(-71.67, -71.47),
       'logo' => UploadedFile::fake()->create('file.png'),
       'cover' => UploadedFile::fake()->create('file.jpeg'),
-      /*'logo' => new \Illuminate\Http\UploadedFile(resource_path($logoName), $logoName, null, null, true),
-      'cover' => new \Illuminate\Http\UploadedFile(resource_path($coverName), $coverName, null, null, true),*/
     ];
 
 
