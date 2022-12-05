@@ -18,12 +18,32 @@ class GoodController extends Controller {
       'name' => 'required|max:255|unique:goods',
       'brand' => 'required|max:255',
       'category' => 'required|max:255',
+      'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ]);
 
+    $imageName = $this->storeImage($request);
+
     $good = new Good($request->all());
+    $good->image = $imageName;
     $good->save();
 
     return $good;
+  }
+
+  /**
+   * move to storage the producto image and return de filename
+   *
+   * @param Illuminate\Http\Request $request
+   * @return String
+   */
+  private function storeImage(Request $request) : String  {
+    $image = $request->file('image');
+
+    $imageName = uniqid().'.'.$image->getClientOriginalExtension();
+
+    $image->storeAs('public/goods',$imageName);
+
+    return $imageName;
   }
 
   /**

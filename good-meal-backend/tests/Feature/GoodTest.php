@@ -7,9 +7,12 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\UploadedFile;
 
 class GoodTest extends TestCase {
   use WithFaker;
+
+  private $responseMustHaveArray = ['id', 'name', 'brand', 'category','image','created_at','updated_at','deleted_at'];
 
 
   public function test_saveNoData() {
@@ -48,7 +51,7 @@ class GoodTest extends TestCase {
       fn (AssertableJson $json) =>
       $json->first(
         fn (AssertableJson $json) =>
-        $json->hasAll(['id', 'name', 'brand', 'category','created_at','updated_at','deleted_at'])
+        $json->hasAll($this->responseMustHaveArray)
       )
     );
   }
@@ -57,12 +60,14 @@ class GoodTest extends TestCase {
     $payload = $this->createCorrectPayload();
     $responsePost = $this->postJson('/api/goods', $payload);
 
+    Log::info($responsePost->original);
+
     $response = $this->getJson('/api/goods/'. $responsePost->original['id']);
 
     $response->assertStatus(200);
     $response->assertJson(
       fn (AssertableJson $json) =>
-      $json->hasAll(['id', 'name', 'brand', 'category','created_at','updated_at','deleted_at'])
+      $json->hasAll( $this->responseMustHaveArray )
         ->where('name', $payload['name'])
         ->etc()
     );
@@ -113,6 +118,7 @@ class GoodTest extends TestCase {
       'name' => $this->faker->unique()->words(rand(1,4),true),
       'brand' => $this->faker->words(rand(1,2), true),
       'category' => $categories[ rand(0, count($categories) - 1) ],
+      'image' => UploadedFile::fake()->create('file.png'),
     ];
   }
 }
