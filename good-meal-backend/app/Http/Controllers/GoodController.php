@@ -18,7 +18,7 @@ class GoodController extends Controller {
       'name' => 'required|max:255|unique:goods',
       'brand' => 'required|max:255',
       'category' => 'required|max:255',
-      'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+      'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ]);
 
     $imageName = $this->storeImage($request);
