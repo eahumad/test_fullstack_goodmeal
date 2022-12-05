@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\GoodController;
+use App\Http\Controllers\GoodMarketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +34,10 @@ Route::controller(GoodController::class)->group( function() {
   Route::get('/goods','list');
   Route::get('/goods/{id}','get');
   Route::put('/goods/{id}','update');
+});
+
+Route::controller(GoodMarketController::class)->group( function() {
+  Route::post('/markets/{market_id}/goods','addGoodToMarket');
+  Route::post('/markets/{market_id}/goods/{good_id}','addExistingGoodToMarket');
+  Route::put('/markets/{market_id}/goods/{good_id}','updateGoodMarket');
 });
